@@ -2457,6 +2457,11 @@ Lint/UnderscorePrefixedVariableName:
   VersionAdded: '0.21'
   AllowKeywordBlockArguments: false
 
+Lint/UnescapedBracketInRegexp:
+  Description: 'Checks for unescaped literal `]` in Regexp.'
+  Enabled: pending
+  VersionAdded: '<<next>>'
+
 Lint/UnexpectedBlockArity:
   Description: 'Looks for blocks that have fewer arguments that the calling method expects.'
   Enabled: pending
@@ -5263,6 +5268,13 @@ Style/SafeNavigation:
   SafeAutoCorrect: false
   # Maximum length of method chains for register an offense.
   MaxChainLength: 2
+
+Style/SafeNavigationChainLength:
+  Description: 'Enforces safe navigation chains length to not exceed the configured maximum.'
+  StyleGuide: '#safe-navigation'
+  Enabled: pending
+  VersionAdded: '<<next>>'
+  Max: 2
 
 Style/Sample:
   Description: >-
