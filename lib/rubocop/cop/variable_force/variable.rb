@@ -31,9 +31,29 @@ module RuboCop
         def assign(node)
           assignment = Assignment.new(node, self)
 
-          @assignments.last&.reassigned! unless captured_by_block?
+          mark_last_as_reassigned!(assignment)
 
           @assignments << assignment
+        end
+
+        def mark_last_as_reassigned!(assignment)
+          return if captured_by_block?
+          return if conditional_reassignment?(assignment)
+
+          @assignments.filter {|a| a.parent == scope.body_node}.last&.reassigned!
+        end
+
+        # If there's no guarantee that the assignment happens then it is a conditional reassignment. Only a conditional where all branches assign to the value will then count as a non conditional reassignment.
+        def conditional_reassignment?(assignment)
+          return false unless assignment.parent&.if_type?
+          return true if assignment.parent&.else_branch.nil?
+          return false if all_branches_assign?(assignment)
+
+          true
+        end
+
+        def all_branches_assign?(assignment)
+          @assignments.filter {|a| a.parent == assignment.parent }.count == assignment.parent&.branches.count
         end
 
         def referenced?

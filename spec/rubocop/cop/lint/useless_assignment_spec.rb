@@ -551,6 +551,63 @@ RSpec.describe RuboCop::Cop::Lint::UselessAssignment, :config do
     end
   end
 
+  context 'blablabla' do
+    it 'registers no offense' do
+      expect_no_offenses(<<~RUBY)
+        def some_method
+          changed = false
+
+          if Random.rand > 1
+            changed = true
+          end
+
+          [].each do
+            changed = true
+          end
+
+          puts changed
+        end
+      RUBY
+    end
+
+    it 'registers offense' do
+      expect_no_offenses(<<~RUBY)
+        def some_method
+          changed = false
+
+          if Random.rand > 1
+            changed = true
+          elsif Random.rand > 3
+            changed = false
+          else
+            changed = true
+          end
+
+          [].each do
+            changed = true
+          end
+
+          puts changed
+        end
+      RUBY
+    end
+
+    it 'registers no offense' do
+      expect_no_offenses(<<~RUBY)
+        def foo
+          a = true
+          if something
+            a = false
+          end
+          [].each do |n|
+            a = false
+          end
+          a
+        end
+      RUBY
+    end
+  end
+
   context "when a variable is reassigned in loop body but won't " \
           'be referenced either next iteration or loop condition' do
     it 'registers an offense' do

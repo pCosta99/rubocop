@@ -9,7 +9,7 @@ module RuboCop
 
         MULTIPLE_LEFT_HAND_SIDE_TYPE = :mlhs
 
-        attr_reader :node, :variable, :referenced, :references, :reassigned
+        attr_reader :node, :parent, :variable, :referenced, :references, :reassigned
 
         alias referenced? referenced
         alias reassigned? reassigned
@@ -22,6 +22,7 @@ module RuboCop
           end
 
           @node = node
+          @parent = node.parent
           @variable = variable
           @referenced = false
           @references = []
